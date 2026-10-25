@@ -3,263 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FluencyMaster - English Speaking & AI Tutor</title>
+    <title>FluencyDuo Pro 3D - Storytelling Edition</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-light: #6366f1;
+            --primary: #58cc02;
+            --primary-dark: #46a302;
             --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --warning: #ffc800;
+            --danger: #ff4b4b;
             --bg: #0b0f19;
-            --card-bg: #1e293b;
+            --card-bg: #161e2e;
             --text: #f8fafc;
             --text-light: #94a3b8;
             --border: #334155;
+            --shadow-3d: 0 10px 0 rgba(0, 0, 0, 0.5);
         }
 
         [data-theme="light"] {
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text: #1e293b;
+            --text: #0f172a;
             --text-light: #64748b;
-            --border: #e2e8f0;
-            --primary-light: #4f46e5;
+            --border: #cbd5e1;
+            --shadow-3d: 0 10px 0 #cbd5e1;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: transform 0.1s ease, background 0.3s, color 0.3s; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 100px; overflow-x: hidden; }
 
-        /* Auth Overlay */
         #auth-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 9999;
             display: flex; justify-content: center; align-items: center; padding: 20px;
         }
         .auth-card {
-            background: var(--card-bg); border: 1px solid var(--border); padding: 30px; border-radius: 24px;
-            width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center;
+            background: var(--card-bg); border: 3px solid var(--border); padding: 40px; border-radius: 32px;
+            width: 100%; max-width: 420px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); text-align: center;
+            animation: floatCard 4s ease-in-out infinite;
         }
+        @keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
         .auth-input {
-            width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border);
-            background: var(--bg); color: var(--text); font-size: 15px; outline: none;
+            width: 100%; padding: 16px; margin: 12px 0; border-radius: 18px; border: 2px solid var(--border);
+            background: var(--bg); color: var(--text); font-size: 16px; outline: none; font-weight: 800;
         }
         .auth-btn {
-            width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px;
-            font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 15px;
+            width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 18px;
+            font-size: 16px; font-weight: 900; cursor: pointer; margin-top: 15px; box-shadow: 0 6px 0 var(--primary-dark);
+            text-transform: uppercase; letter-spacing: 1px;
         }
+        .auth-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--primary-dark); }
 
-        /* Header */
         header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white; padding: 20px; border-bottom-left-radius: 32px; border-bottom-right-radius: 32px;
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            background: linear-gradient(135deg, #161e2e, #0b0f19); border-bottom: 3px solid var(--border); padding: 18px 20px;
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);
         }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .app-title { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        .header-actions { display: flex; gap: 8px; align-items: center; }
-        .theme-toggle, .badge-btn { background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; color: white; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin: 0 auto; }
+        .app-title { font-size: 24px; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 8px; text-shadow: 0 2px 6px rgba(88,204,2,0.4); }
         
-        .stats-card {
-            background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(12px); padding: 14px;
-            border-radius: 16px; display: flex; justify-content: space-around; text-align: center;
-        }
-        .stat-val { font-size: 18px; font-weight: 800; }
-        .stat-lbl { font-size: 11px; opacity: 0.85; text-transform: uppercase; }
+        .duo-stats { display: flex; gap: 8px; align-items: center; font-weight: 900; font-size: 13px; }
+        .stat-badge { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 14px; border: 2px solid var(--border); box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
 
-        /* Categories Scroll */
-        .categories { display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; }
+        .reward-banner {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff; padding: 18px; border-radius: 22px; margin: 20px; max-width: 460px;
+            margin-left: auto; margin-right: auto; display: flex; justify-content: space-between; align-items: center; font-weight: 900;
+            box-shadow: 0 8px 0 #b45309, 0 15px 30px rgba(245, 158, 11, 0.4);
+        }
+        .claim-btn { background: #ffffff; color: #b45309; border: none; padding: 10px 16px; border-radius: 12px; cursor: pointer; font-weight: 900; box-shadow: 0 4px 0 #cbd5e1; }
+        .claim-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #cbd5e1; }
+
+        .categories { display: flex; gap: 12px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; max-width: 500px; margin: 0 auto; }
         .categories::-webkit-scrollbar { display: none; }
         .cat-chip {
-            background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
-            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+            background: var(--card-bg); border: 2px solid var(--border); color: var(--text);
+            padding: 10px 18px; border-radius: 18px; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap;
+            box-shadow: 0 4px 0 var(--border);
         }
-        .cat-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .cat-chip.active { background: var(--primary); color: white; border-color: var(--primary-dark); box-shadow: 0 4px 0 var(--primary-dark); transform: translateY(-2px); }
 
-        /* Container & Cards */
         .container { padding: 0 20px; max-width: 500px; margin: 0 auto; }
+        
         .card {
-            background: var(--card-bg); padding: 20px; margin-bottom: 16px; border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); position: relative;
+            background: var(--card-bg); padding: 24px; margin-bottom: 20px; border-radius: 26px;
+            border: 2px solid var(--border); box-shadow: var(--shadow-3d); position: relative;
         }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .level-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: rgba(79, 70, 229, 0.15); color: var(--primary); }
-        .fav-star { font-size: 18px; cursor: pointer; color: var(--text-light); }
-        .fav-star.active { color: var(--warning); }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .level-tag { font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 5px 12px; border-radius: 10px; background: rgba(88, 204, 2, 0.15); color: var(--primary); border: 1px solid var(--primary); }
+        .fav-star { font-size: 22px; cursor: pointer; color: var(--text-light); }
+        .fav-star.active { color: var(--warning); text-shadow: 0 0 10px rgba(255,200,0,0.6); }
         
-        .english-text { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-        .hindi-text { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+        .english-text { font-size: 21px; font-weight: 900; color: var(--text); margin-bottom: 6px; letter-spacing: 0.3px; }
+        .hindi-text { font-size: 14px; color: var(--text-light); margin-bottom: 18px; font-weight: 700; }
         
-        .btn-group { display: flex; gap: 8px; }
+        .btn-group { display: flex; gap: 10px; }
         .action-btn {
-            flex: 1; padding: 10px; border: none; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
+            flex: 1; padding: 14px; border: none; border-radius: 16px; font-size: 13px; font-weight: 900; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px; color: white; text-transform: uppercase;
         }
-        .btn-listen { background: rgba(79, 70, 229, 0.15); color: var(--primary); }
-        .btn-speak { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .btn-record { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .btn-listen { background: #38bdf8; box-shadow: 0 5px 0 #0284c7; }
+        .btn-listen:active { transform: translateY(4px); box-shadow: 0 1px 0 #0284c7; }
+        .btn-speak { background: var(--primary); box-shadow: 0 5px 0 var(--primary-dark); }
+        .btn-speak:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--primary-dark); }
 
-        /* Pricing & Plans */
+        /* Story Cards Styling */
+        .story-card {
+            background: var(--card-bg); border: 2px solid var(--border); padding: 22px; border-radius: 24px;
+            margin-bottom: 16px; box-shadow: var(--shadow-3d); cursor: pointer;
+        }
+        .story-card:hover { border-color: var(--primary); }
+        .story-title { font-size: 18px; font-weight: 900; color: var(--warning); margin-bottom: 6px; }
+        .story-desc { font-size: 14px; color: var(--text-light); font-weight: 700; margin-bottom: 12px; }
+
+        .quiz-option {
+            background: var(--card-bg); border: 2px solid var(--border); padding: 16px; border-radius: 16px;
+            margin-bottom: 12px; font-weight: 800; cursor: pointer; text-align: center; box-shadow: 0 5px 0 var(--border);
+        }
+        .quiz-option:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--border); }
+        .quiz-option:hover { border-color: var(--primary); }
+
         .pricing-card {
-            background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 15px; position: relative;
+            background: var(--card-bg); border: 2px solid var(--border); border-radius: 26px; padding: 26px; text-align: center; margin-bottom: 20px; position: relative; box-shadow: var(--shadow-3d);
         }
-        .pricing-card.featured { border-color: var(--primary); }
-        .price-tag { font-size: 26px; font-weight: 800; color: var(--primary); margin: 10px 0; }
-        .pay-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; }
+        .pricing-card.featured { border-color: var(--primary); box-shadow: 0 10px 0 var(--primary-dark), 0 20px 40px rgba(88,204,2,0.25); }
+        .price-tag { font-size: 30px; font-weight: 900; color: var(--primary); margin: 10px 0; }
+        .pay-btn { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 18px; font-weight: 900; cursor: pointer; margin-top: 15px; box-shadow: 0 6px 0 var(--primary-dark); text-transform: uppercase; }
+        .pay-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--primary-dark); }
 
-        /* Payment Modal */
         #payment-modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
             display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
         }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 400px; padding: 25px; border-radius: 20px; border: 1px solid var(--border); text-align: center; }
-        .upi-option { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin: 10px 0; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .upi-option:hover { border-color: var(--primary); }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 420px; padding: 32px; border-radius: 30px; border: 3px solid var(--border); text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.7); }
+        .upi-option { background: var(--bg); border: 2px solid var(--border); padding: 16px; border-radius: 18px; margin: 12px 0; cursor: pointer; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 0 var(--border); }
+        .upi-option:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--border); }
 
-        /* Feedback Toast */
+        .leaderboard-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-bg); border: 2px solid var(--border);
+            padding: 16px 20px; border-radius: 18px; margin-bottom: 12px; font-weight: 900; box-shadow: 0 5px 0 var(--border);
+        }
+        .rank-num { font-size: 18px; width: 35px; color: var(--warning); text-shadow: 0 2px 4px rgba(255,200,0,0.4); }
+
         #feedback-box {
-            position: fixed; bottom: 85px; left: 20px; right: 20px; max-width: 460px; margin: 0 auto;
-            background: #1e293b; color: white; padding: 16px 20px; border-radius: 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); border: 1px solid #475569; display: none; z-index: 100;
+            position: fixed; bottom: 95px; left: 20px; right: 20px; max-width: 460px; margin: 0 auto;
+            background: var(--card-bg); color: var(--text); padding: 22px; border-radius: 26px; 
+            border: 3px solid var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; z-index: 100;
         }
-        .feedback-title { font-size: 12px; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
-        .feedback-msg { font-size: 15px; font-weight: 600; }
+        .feedback-title { font-size: 15px; text-transform: uppercase; margin-bottom: 6px; font-weight: 900; }
+        .feedback-msg { font-size: 16px; font-weight: 800; }
 
-        /* Views */
         .view-section { display: none; }
-        .view-section.active-view { display: block; }
+        .view-section.active-view { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* AI Chat Box */
-        .chat-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 15px; height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-        .chat-bubble { padding: 10px 14px; border-radius: 14px; max-width: 80%; font-size: 14px; line-height: 1.4; }
+        .chat-box { background: var(--card-bg); border: 2px solid var(--border); border-radius: 26px; padding: 20px; height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; box-shadow: var(--shadow-3d); }
+        .chat-bubble { padding: 14px 18px; border-radius: 18px; max-width: 80%; font-size: 14px; font-weight: 800; line-height: 1.4; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
         .chat-bubble.ai { background: var(--border); color: var(--text); align-self: flex-start; }
-        .chat-bubble.user { background: var(--primary); color: white; align-self: flex-end; }
+        .chat-bubble.user { background: var(--primary); color: white; align-self: flex-end; box-shadow: 0 5px 0 var(--primary-dark); }
         .chat-input-area { display: flex; gap: 10px; }
-        .chat-input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 14px; outline: none; }
-        .send-btn { background: var(--primary); color: white; border: none; padding: 0 16px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .chat-input { flex: 1; padding: 16px; border-radius: 18px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 15px; outline: none; font-weight: 800; }
+        .send-btn { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 6px 0 var(--primary-dark); }
+        .send-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--primary-dark); }
 
-        /* Bottom Nav */
         nav {
-            position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); height: 75px;
-            display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); z-index: 99;
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); height: 85px;
+            display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--border); z-index: 99;
+            box-shadow: 0 -15px 30px rgba(0,0,0,0.4);
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 11px; font-weight: 700; cursor: pointer; gap: 4px; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item span { font-size: 20px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-light); font-size: 12px; font-weight: 900; cursor: pointer; gap: 4px; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-item span { font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
     </style>
 </head>
 <body>
 
-    <!-- AUTHENTICATION MODAL -->
     <div id="auth-overlay">
         <div class="auth-card">
-            <h2>✨ Welcome to FluencyMaster</h2>
-            <p style="color: var(--text-light); font-size: 13px; margin: 10px 0 20px;">Enter your name to start your English learning journey</p>
-            <input type="text" id="username-input" class="auth-input" placeholder="Your Full Name">
-            <input type="email" id="email-input" class="auth-input" placeholder="Email Address">
-            <button class="auth-btn" onclick="handleLogin()">Get Started 🚀</button>
+            <h2 style="font-size: 28px; color: var(--primary); font-weight: 900; margin-bottom: 5px;">🦉 FluencyDuo Pro</h2>
+            <p style="color: var(--text-light); font-size: 14px; margin: 10px 0 20px; font-weight: 800;">Enter your name to start storytelling adventure!</p>
+            <input type="text" id="username-input" class="auth-input" placeholder="Your Username">
+            <button class="auth-btn" onclick="handleLogin()">LAUNCH GAME 🚀</button>
         </div>
     </div>
 
-    <!-- MAIN APP INTERFACE -->
     <header>
         <div class="header-top">
-            <div class="app-title">🗣️ FluencyMaster</div>
-            <div class="header-actions">
-                <button class="badge-btn" id="pro-status-badge">⭐ Free</button>
-                <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
-            </div>
-        </div>
-        <div class="stats-card">
-            <div>
-                <div class="stat-val" id="completed-count">0</div>
-                <div class="stat-lbl">Practiced</div>
-            </div>
-            <div style="width: 1px; background: rgba(255,255,255,0.2);"></div>
-            <div>
-                <div class="stat-val" id="streak-val">🔥 1 Day</div>
-                <div class="stat-lbl">Streak</div>
-            </div>
-            <div style="width: 1px; background: rgba(255,255,255,0.2);"></div>
-            <div>
-                <div class="stat-val" id="user-badge">Bronze 🥉</div>
-                <div class="stat-lbl">Rank</div>
+            <div class="app-title">🦉 FluencyDuo</div>
+            <div class="duo-stats">
+                <div class="stat-badge">🔥 <span id="streak-val">1</span></div>
+                <div class="stat-badge">⚡ <span id="xp-val">0</span> XP</div>
+                <div class="stat-badge">❤️ <span id="lives-val">5</span></div>
             </div>
         </div>
     </header>
 
-    <!-- TAB 1: LEARN & PRACTICE -->
+    <div class="reward-banner">
+        <span>🎁 Daily Bonus Ready!</span>
+        <button class="claim-btn" onclick="claimDailyBonus()">CLAIM +50 XP</button>
+    </div>
+
+    <!-- TAB 1: LEARN PATH -->
     <div id="view-learn" class="view-section active-view">
         <div class="categories">
-            <div class="cat-chip active" onclick="filterCategory('All', this)">🌟 All Lessons</div>
-            <div class="cat-chip" onclick="filterCategory('Favorites', this)">⭐ Favorites</div>
-            <div class="cat-chip" onclick="filterCategory('Daily', this)">🏠 Daily Life</div>
-            <div class="cat-chip" onclick="filterCategory('Office', this)">💼 Office & Interview</div>
+            <div class="cat-chip active" onclick="filterCategory('All', this)">🌟 All</div>
+            <div class="cat-chip" onclick="filterCategory('Favorites', this)">⭐ Favs</div>
+            <div class="cat-chip" onclick="filterCategory('Daily', this)">🏠 Daily</div>
+            <div class="cat-chip" onclick="filterCategory('Office', this)">💼 Office</div>
             <div class="cat-chip" onclick="filterCategory('Travel', this)">✈️ Travel</div>
         </div>
         <div class="container" id="phrase-container"></div>
     </div>
 
-    <!-- TAB 2: AI VOICE PARTNER -->
+    <!-- TAB 2: FAMILY STORIES MODE -->
+    <div id="view-stories" class="view-section">
+        <div class="container" style="padding-top: 20px;">
+            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 6px; text-align: center;">📖 Family Storytelling</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 13px; margin-bottom: 20px; font-weight: 800;">Learn English through heart-touching family stories</p>
+            <div id="story-container"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: QUIZ MODE -->
+    <div id="view-quiz" class="view-section">
+        <div class="container" style="padding-top: 20px;">
+            <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 15px; text-align: center;">🎯 Pro 3D English Quiz</h2>
+            <div class="card" id="quiz-card">
+                <div id="quiz-question" style="font-size: 20px; font-weight: 900; margin-bottom: 20px; text-align: center;">Loading Quiz...</div>
+                <div id="quiz-options-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: LEADERBOARD -->
+    <div id="view-leaderboard" class="view-section">
+        <div class="container" style="padding-top: 20px;">
+            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 5px; text-align: center;">🏆 Global 3D League</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 13px; margin-bottom: 20px; font-weight: 800;">Top Worldwide Competitors</p>
+            <div id="leaderboard-list"></div>
+        </div>
+    </div>
+
+    <!-- TAB 5: PREMIUM -->
+    <div id="view-premium" class="view-section">
+        <div class="container" style="padding-top: 20px;">
+            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 5px; text-align: center;">💎 FluencyPlus Pro</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 13px; margin-bottom: 20px; font-weight: 800;">Unlock unlimited hearts, stories, and ad-free access.</p>
+            
+            <div class="pricing-card">
+                <h3>Weekly Pass</h3>
+                <div class="price-tag">₹29 <span style="font-size:12px; color:var(--text-light);">/ week</span></div>
+                <p style="font-size: 13px; color: var(--text-light);">Quick access for 7 days</p>
+                <button class="pay-btn" onclick="openPaymentModal('Weekly Pass', 29)">Select Weekly</button>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Monthly Pass</h3>
+                <div class="price-tag">₹59 <span style="font-size:12px; color:var(--text-light);">/ month</span></div>
+                <p style="font-size: 13px; color: var(--text-light);">Unlimited AI + All Stories</p>
+                <button class="pay-btn" onclick="openPaymentModal('Monthly Pass', 59)">Select Monthly</button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div style="position: absolute; top: -14px; right: 20px; background: var(--primary); color: white; font-size: 10px; padding: 4px 12px; border-radius: 20px; font-weight:900;">BEST VALUE</div>
+                <h3>Yearly Pass</h3>
+                <div class="price-tag">₹350 <span style="font-size:12px; color:var(--text-light);">/ year</span></div>
+                <p style="font-size: 13px; color: var(--text-light);">Save big with 12 months access</p>
+                <button class="pay-btn" onclick="openPaymentModal('Yearly Pass', 350)">Select Yearly</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: AI COACH -->
     <div id="view-chat" class="view-section">
         <div class="container" style="padding-top: 20px;">
-            <h2 style="font-size: 18px; margin-bottom: 12px;">🤖 AI Conversation Tutor</h2>
+            <h2 style="font-size: 22px; font-weight: 900; margin-bottom: 12px;">🤖 3D AI Speaking Coach</h2>
             <div class="chat-box" id="chat-messages">
-                <div class="chat-bubble ai">Hello! I am your AI speaking partner. Let's practice conversations in English. Ask me anything! 🎙️</div>
+                <div class="chat-bubble ai">Hello! Let's practice speaking English together in Storytelling mode! 🎙️</div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="user-chat-input" class="chat-input" placeholder="Type in English...">
+                <input type="text" id="user-chat-input" class="chat-input" placeholder="Type message..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
                 <button class="send-btn" onclick="sendChatMessage()">Send</button>
             </div>
         </div>
     </div>
 
-    <!-- TAB 3: SUBSCRIPTION & PRO -->
-    <div id="view-premium" class="view-section">
-        <div class="container" style="padding-top: 20px;">
-            <h2 style="font-size: 20px; margin-bottom: 5px; text-align: center;">💎 Go Pro</h2>
-            <p style="font-size: 13px; color: var(--text-light); text-align: center; margin-bottom: 20px;">Unlock unlimited AI voice sessions and advance lessons.</p>
-            
-            <div class="pricing-card">
-                <h3>Monthly Plan</h3>
-                <div class="price-tag">₹199 <span style="font-size:13px; color:var(--text-light);">/month</span></div>
-                <p style="font-size: 13px; color: var(--text-light);">Full access + AI Tutor</p>
-                <button class="pay-btn" onclick="openPaymentModal('Monthly Pro', 199)">Upgrade Now</button>
-            </div>
-
-            <div class="pricing-card featured">
-                <div style="position: absolute; top: -10px; right: 20px; background: var(--primary); color: white; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight:700;">BEST VALUE</div>
-                <h3>Lifetime Pass</h3>
-                <div class="price-tag">₹499 <span style="font-size:13px; color:var(--text-light);">/lifetime</span></div>
-                <p style="font-size: 13px; color: var(--text-light);">Unlimited access forever + Priority Updates</p>
-                <button class="pay-btn" onclick="openPaymentModal('Lifetime Pro', 499)">Get Lifetime Access</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAYMENT GATEWAY MODAL -->
+    <!-- PAYMENT MODAL -->
     <div id="payment-modal">
         <div class="modal-content">
-            <h3 id="modal-plan-title" style="margin-bottom: 5px;">Select Payment Method</h3>
-            <p id="modal-plan-price" style="color: var(--primary); font-weight: 700; margin-bottom: 20px;"></p>
-            
-            <div class="upi-option" onclick="processPayment('Google Pay / PhonePe UPI')">🟢 Pay via UPI (GPay/PhonePe)</div>
+            <h3 id="modal-plan-title" style="margin-bottom: 8px; font-weight: 900; font-size: 22px;">Select Payment</h3>
+            <p id="modal-plan-price" style="color: var(--primary); font-weight: 900; font-size: 20px; margin-bottom: 20px;"></p>
+            <div class="upi-option" onclick="processPayment('UPI (GPay / PhonePe)')">🟢 Pay via UPI</div>
             <div class="upi-option" onclick="processPayment('Credit / Debit Card')">💳 Pay via Card</div>
-            <div class="upi-option" onclick="processPayment('Net Banking')">🏦 Net Banking</div>
-            
-            <button onclick="closePaymentModal()" style="background: transparent; border: none; color: var(--text-light); margin-top: 15px; cursor: pointer; font-weight: 600;">Cancel</button>
+            <button onclick="closePaymentModal()" style="background: transparent; border: none; color: var(--text-light); margin-top: 15px; cursor: pointer; font-weight: 900;">Cancel</button>
         </div>
     </div>
 
-    <!-- Feedback Toast -->
     <div id="feedback-box">
-        <div class="feedback-title" id="fb-title">Listening...</div>
-        <div class="feedback-msg" id="fb-msg">Speak clearly into your mic</div>
+        <div class="feedback-title" id="fb-title">Great!</div>
+        <div class="feedback-msg" id="fb-msg">Correct pronunciation</div>
     </div>
 
-    <!-- Bottom Navbar -->
     <nav>
         <div class="nav-item active" onclick="switchView('learn', this)"><span>🏠</span>Learn</div>
-        <div class="nav-item" onclick="switchView('chat', this)"><span>🤖</span>AI Chat</div>
-        <div class="nav-item" onclick="switchView('premium', this)"><span>💎</span>Go Pro</div>
+        <div class="nav-item" onclick="switchView('stories', this)"><span>📖</span>Stories</div>
+        <div class="nav-item" onclick="switchView('quiz', this)"><span>🎯</span>Quiz</div>
+        <div class="nav-item" onclick="switchView('leaderboard', this)"><span>🏆</span>Ranks</div>
+        <div class="nav-item" onclick="switchView('premium', this)"><span>💎</span>Pro</div>
+        <div class="nav-item" onclick="switchView('chat', this)"><span>🤖</span>AI</div>
     </nav>
 
     <script>
@@ -273,43 +323,151 @@
             { id: 7, category: "Travel", level: "Intermediate", english: "Can I get the bill, please?", hindi: "क्या मुझे बिल मिल सकता है, कृपया?", fav: false }
         ];
 
-        let currentUser = localStorage.getItem("fluency_user");
-        let practicedCount = parseInt(localStorage.getItem("fluency_score") || "0");
-        let currentFilter = 'All';
-        let selectedPlan = "";
+        // Family Stories Data (Grandfather, Grandmother, Father, Mother, Beta, Beti)
+        const familyStories = [
+            { character: "Grandfather (Dada Ji)", title: "The Wise Old Tree", english: "Grandfather sat under the banyan tree and told us tales of his childhood courage.", hindi: "दादाजी बरगद के पेड़ के नीचे बैठे और हमें अपने बचपन के साहस की कहानियाँ सुनाईं।" },
+            { character: "Grandmother (Dadi Ji)", title: "Magic Bedtime Stories", hindiText: "दादी माँ हर रात सोने से पहले परियों की खूबसूरत कहानियाँ सुनाती थीं।", english: "Grandmother cooked sweet treats and told magical bedtime stories every single night.", hindi: "दादी माँ हर रात मीठी चीजें बनाती थीं और जादुई सोने की कहानियाँ सुनाती थीं।" },
+            { character: "Father (Papa)", title: "Working Hard for the Family", english: "Father works tirelessly all day to ensure our family has a bright and secure future.", hindi: "पिताजी हमारे परिवार के उज्ज्वल भविष्य के लिए दिन-रात कड़ी मेहनत करते हैं।" },
+            { character: "Mother (Maa)", title: "Unconditional Love", english: "Mother wakes up early every morning, preparing breakfast with love and a warm smile.", hindi: "माँ रोज सुबह जल्दी उठकर प्यार और मुस्कान के साथ नाश्ता तैयार करती हैं।" },
+            { character: "Beta (Son)", title: "The Little Dreamer", english: "The young boy built a small model rocket, dreaming of exploring distant galaxies one day.", hindi: "छोटे बेटे ने एक छोटा सा रॉकेट मॉडल बनाया, जो एक दिन अंतरिक्ष की यात्रा करने का सपना देखता है।" },
+            { character: "Beti (Daughter)", title: "Painting Her Dreams", english: "The little girl painted colorful rainbows on canvas, bringing joy to everyone around her.", hindi: "छोटी बेटी ने कैनवास पर रंगीन इंद्रधनुष उकेरा, जिससे आसपास सभी के चेहरों पर खुशी आ गई।" }
+        ];
 
-        // Check Login State on Load
+        const quizData = [
+            { q: "What is the meaning of 'How are you doing today?'", options: ["आज आप कैसे हैं?", "कल आप कहाँ थे?", "आपका नाम क्या है?"], answer: 0 },
+            { q: "Translate: 'मुझे आज थोड़ी देर हो रही है।'", options: ["I am very happy today.", "I am running a bit late today.", "Where are you going?"], answer: 1 },
+            { q: "What does 'EOD' mean in office English?", options: ["End of Day", "Early on Date", "Every Other Day"], answer: 0 }
+        ];
+
+        let currentQuizIndex = 0;
+        let currentUser = localStorage.getItem("duo_user");
+        let userXp = parseInt(localStorage.getItem("duo_xp") || "0");
+        let userLives = parseInt(localStorage.getItem("duo_lives") || "5");
+        let userStreak = parseInt(localStorage.getItem("duo_streak") || "1");
+        let currentFilter = 'All';
+
+        let leaderboardData = [
+            { name: "Rahul (You)", xp: userXp },
+            { name: "Priya Sharma", xp: 350 },
+            { name: "Aman Verma", xp: 290 },
+            { name: "Sneha Patel", xp: 210 },
+            { name: "Rohit Singh", xp: 175 }
+        ];
+
         window.onload = function() {
             if(currentUser) {
                 document.getElementById("auth-overlay").style.display = "none";
                 updateStats();
             }
+            renderPhrases();
+            renderStories();
+            loadQuiz();
+            renderLeaderboard();
         };
 
         function handleLogin() {
             const name = document.getElementById("username-input").value.trim();
-            if(!name) {
-                alert("Please enter your name!");
-                return;
-            }
-            localStorage.setItem("fluency_user", name);
+            if(!name) { alert("Please enter your username!"); return; }
+            currentUser = name;
+            localStorage.setItem("duo_user", name);
             document.getElementById("auth-overlay").style.display = "none";
             updateStats();
+            renderLeaderboard();
         }
 
-        function renderPhrases(filter = 'All') {
-            currentFilter = filter;
+        function claimDailyBonus() {
+            userXp += 50;
+            localStorage.setItem("duo_xp", userXp);
+            updateStats();
+            renderLeaderboard();
+            alert("🎁 Success! +50 Story Daily XP Added!");
+        }
+
+        function updateStats() {
+            document.getElementById("xp-val").innerText = userXp;
+            document.getElementById("lives-val").innerText = userLives;
+            document.getElementById("streak-val").innerText = userStreak;
+
+            let userEntry = leaderboardData.find(u => u.name.includes("You") || u.name === currentUser);
+            if(userEntry) {
+                userEntry.name = (currentUser || "User") + " (You)";
+                userEntry.xp = userXp;
+            } else {
+                leaderboardData.push({ name: (currentUser || "User") + " (You)", xp: userXp });
+            }
+        }
+
+        function renderStories() {
+            const container = document.getElementById("story-container");
+            container.innerHTML = "";
+
+            familyStories.forEach((story, idx) => {
+                container.innerHTML += `
+                    <div class="story-card">
+                        <div class="story-title">📖 ${story.character}: ${story.title}</div>
+                        <div class="english-text" style="font-size:17px; margin-bottom:8px;">"${story.english}"</div>
+                        <div class="story-desc">मतलब: ${story.hindi}</div>
+                        <button class="action-btn btn-listen" onclick="speakText('${story.english}')">🔊 Listen Story</button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLeaderboard() {
+            updateStats();
+            leaderboardData.sort((a, b) => b.xp - a.xp);
+            const list = document.getElementById("leaderboard-list");
+            list.innerHTML = "";
+
+            leaderboardData.forEach((item, index) => {
+                let medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`;
+                list.innerHTML += `
+                    <div class="leaderboard-item">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <span class="rank-num">${medal}</span>
+                            <span>${item.name}</span>
+                        </div>
+                        <span style="color: var(--primary); font-weight: 900;">${item.xp} XP</span>
+                    </div>
+                `;
+            });
+        }
+
+        function loadQuiz() {
+            if(currentQuizIndex >= quizData.length) currentQuizIndex = 0;
+            const qObj = quizData[currentQuizIndex];
+            document.getElementById("quiz-question").innerText = qObj.q;
+            const optContainer = document.getElementById("quiz-options-container");
+            optContainer.innerHTML = "";
+
+            qObj.options.forEach((opt, idx) => {
+                optContainer.innerHTML += `<div class="quiz-option" onclick="checkQuizAnswer(${idx}, ${qObj.answer})">${opt}</div>`;
+            });
+        }
+
+        function checkQuizAnswer(selected, correct) {
+            if(selected === correct) {
+                alert("🎉 Correct Answer! +20 XP");
+                userXp += 20;
+                localStorage.setItem("duo_xp", userXp);
+            } else {
+                alert("❌ Wrong Answer! -1 Heart");
+                userLives = Math.max(0, userLives - 1);
+                localStorage.setItem("duo_lives", userLives);
+            }
+            currentQuizIndex++;
+            updateStats();
+            loadQuiz();
+            renderLeaderboard();
+        }
+
+        function renderPhrases() {
             const container = document.getElementById("phrase-container");
             container.innerHTML = "";
 
             let filtered = allPhrases;
-            if(filter === 'Favorites') filtered = allPhrases.filter(p => p.fav);
-            else if(filter !== 'All') filtered = allPhrases.filter(p => p.category === filter);
-
-            if(filtered.length === 0) {
-                container.innerHTML = `<div style="text-align:center; color:var(--text-light); padding:40px;">No items found here! ⭐</div>`;
-                return;
-            }
+            if(currentFilter === 'Favorites') filtered = allPhrases.filter(p => p.fav);
+            else if(currentFilter !== 'All') filtered = allPhrases.filter(p => p.category === currentFilter);
 
             filtered.forEach((item) => {
                 const card = document.createElement("div");
@@ -323,8 +481,7 @@
                     <div class="hindi-text">मतलब: ${item.hindi}</div>
                     <div class="btn-group">
                         <button class="action-btn btn-listen" onclick="speakText('${item.english}')">🔊 Listen</button>
-                        <button class="action-btn btn-speak" onclick="startSpeechTest('${item.english}')">🎙️ Test</button>
-                        <button class="action-btn btn-record" onclick="recordAudio('${item.english}')">🎧 Record</button>
+                        <button class="action-btn btn-speak" onclick="startSpeechTest('${item.english}')">🎙️ Speak & Earn</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -334,15 +491,13 @@
         function filterCategory(cat, element) {
             document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
             element.classList.add('active');
-            renderPhrases(cat);
+            currentFilter = cat;
+            renderPhrases();
         }
 
         function toggleFav(id) {
             const item = allPhrases.find(p => p.id === id);
-            if(item) {
-                item.fav = !item.fav;
-                renderPhrases(currentFilter);
-            }
+            if(item) { item.fav = !item.fav; renderPhrases(); }
         }
 
         function speakText(text) {
@@ -350,16 +505,16 @@
                 window.speechSynthesis.cancel();
                 let speech = new SpeechSynthesisUtterance(text);
                 speech.lang = 'en-US';
+                speech.rate = 0.9;
                 window.speechSynthesis.speak(speech);
             }
         }
 
         function startSpeechTest(expectedText) {
+            if(userLives <= 0) { alert("❤️ Out of hearts!"); return; }
+
             window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!window.SpeechRecognition) {
-                alert("Speech recognition is supported in Google Chrome browser.");
-                return;
-            }
+            if (!window.SpeechRecognition) { alert("Speech recognition supported in Google Chrome."); return; }
 
             const recognition = new SpeechRecognition();
             recognition.lang = 'en-US';
@@ -369,78 +524,44 @@
             const msg = document.getElementById("fb-msg");
 
             box.style.display = "block";
-            title.innerText = "🎤 Listening... Speak now!";
+            title.innerText = "🎤 Listening in Story Mode...";
             title.style.color = "#38bdf8";
-            msg.innerText = `Target: "${expectedText}"`;
+            msg.innerText = `Say: "${expectedText}"`;
 
             recognition.onresult = function(event) {
-                let spokenText = event.results[0][0].transcript;
-                let cleanSpoken = spokenText.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g,"").trim();
+                let spokenText = event.results[0][0].transcript.toLowerCase().trim();
                 let cleanExpected = expectedText.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g,"").trim();
 
-                if(cleanSpoken.includes(cleanExpected) || cleanExpected.includes(cleanSpoken)) {
-                    title.innerText = "✅ Perfect Pronunciation!";
-                    title.style.color = "#34d399";
+                if(spokenText.includes(cleanExpected) || cleanExpected.includes(spokenText)) {
+                    title.innerText = "🎉 PERFECT! (+15 XP)";
+                    title.style.color = "var(--primary)";
                     msg.innerText = `You said: "${spokenText}"`;
-                    practicedCount++;
-                    localStorage.setItem("fluency_score", practicedCount);
+                    userXp += 15;
+                    localStorage.setItem("duo_xp", userXp);
                     updateStats();
+                    renderLeaderboard();
                 } else {
-                    title.innerText = "⚠️ Almost there! Try again";
-                    title.style.color = "#fbbf24";
+                    title.innerText = "❌ MISMATCH (-1 Heart)";
+                    title.style.color = "var(--danger)";
                     msg.innerText = `You said: "${spokenText}"`;
+                    userLives = Math.max(0, userLives - 1);
+                    localStorage.setItem("duo_lives", userLives);
+                    updateStats();
                 }
                 setTimeout(() => { box.style.display = "none"; }, 4000);
             };
 
             recognition.onerror = function() {
-                title.innerText = "❌ Mic error";
-                title.style.color = "#f87171";
-                msg.innerText = "Could not hear clearly. Try again.";
+                title.innerText = "⚠️ Mic error";
+                title.style.color = "#fbbf24";
+                msg.innerText = "Try speaking closer.";
                 setTimeout(() => { box.style.display = "none"; }, 3000);
             };
 
             recognition.start();
         }
 
-        function recordAudio(text) {
-            alert("🎙️ Recorder started! Say: '" + text + "'");
-            setTimeout(() => {
-                alert("🔊 Playing back your voice...");
-                speakText(text);
-            }, 2000);
-        }
-
-        function updateStats() {
-            document.getElementById("completed-count").innerText = practicedCount;
-            let badge = "Bronze 🥉";
-            if(practicedCount >= 5) badge = "Silver 🥈";
-            if(practicedCount >= 10) badge = "Gold 🥇";
-            document.getElementById("user-badge").innerText = badge;
-        }
-
-        function toggleTheme() {
-            const body = document.documentElement;
-            const btn = document.querySelector('.theme-toggle');
-            if(body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.innerText = "🌙";
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.innerText = "☀️";
-            }
-        }
-
-        function switchView(viewName, element) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active-view'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById('view-' + viewName).classList.add('active-view');
-            element.classList.add('active');
-        }
-
         function openPaymentModal(planName, price) {
-            selectedPlan = planName;
             document.getElementById("modal-plan-title").innerText = planName;
             document.getElementById("modal-plan-price").innerText = "Price: ₹" + price;
             document.getElementById("payment-modal").style.display = "flex";
@@ -451,13 +572,20 @@
         }
 
         function processPayment(method) {
-            alert("⏳ Processing payment via " + method + "...");
+            alert("⏳ Processing secure 3D payment...");
             setTimeout(() => {
                 closePaymentModal();
-                document.getElementById("pro-status-badge").innerText = "👑 PRO";
-                document.getElementById("pro-status-badge").style.background = "#10b981";
-                alert("🎉 Success! Welcome to " + selectedPlan + " Pro Membership!");
+                alert("🎉 Payment Successful! Welcome to FluencyPlus Pro Enterprise!");
             }, 1500);
+        }
+
+        function switchView(viewName, element) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active-view'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('view-' + viewName).classList.add('active-view');
+            if(element) element.classList.add('active');
+            if(viewName === 'leaderboard') renderLeaderboard();
+            if(viewName === 'stories') renderStories();
         }
 
         function sendChatMessage() {
@@ -471,19 +599,15 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             setTimeout(() => {
-                let aiReply = "That's wonderful! Tell me more about your goals.";
-                if(userText.toLowerCase().includes("hello") || userText.toLowerCase().includes("hi")) {
-                    aiReply = "Hello! How can I assist you in your English learning today?";
-                }
+                let aiReply = "That's a wonderful family story thought!";
+                let lower = userText.toLowerCase();
+                if(lower.includes("hello")) aiReply = "Hello there! Ready to read some stories?";
+                else if(lower.includes("grandfather") || lower.includes("grandmother")) aiReply = "Grandparents always tell the wisest stories!";
                 chatBox.innerHTML += `<div class="chat-bubble ai">${aiReply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
                 speakText(aiReply);
             }, 1000);
         }
-
-        renderPhrases('All');
     </script>
 </body>
 </html>
-
-
